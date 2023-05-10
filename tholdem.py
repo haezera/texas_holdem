@@ -3,6 +3,13 @@ import random
 class Player:
     def __init__(self, name):
         self.name = name
+        self.hand = [0, 0]
+
+class Opponent:
+    def __init__(self):
+        self.bluff = random.randint(1, 10)
+        self.hand = [0, 0]
+
 
 class Deck:
     def __init__(self):
@@ -22,6 +29,16 @@ class Card:
         self.suit = suit
         self.number = number
 
+def printc(card):
+    if (card.number != 10):
+        print("----")
+        print("|" + card.number + " |")
+        print("----")
+    else:
+        print("----")
+        print("|" + card.number + "|")
+        print("----")     
+ 
 def introduction():
     print("                        d8b")
     print("                        Y8P")
@@ -40,25 +57,30 @@ def player_info_gathering():
 def player_introduction(player):
     print("Hello, " + player.name + ". Welcome to Texas Holdem.")
     print("The goal of Texas Holdem is to create the best combination of cards possible. These combinations are ranked such that they are less probable the strong they are.")
-
-
-
+    print("Opponents have a 'bluff' rating.")
+    print("The higher their 'bluff' rating, the more likely it is that they bluff a bad hand.")
+    print("----------------------------------------------------------------------------------")
 # Main Function
 
 # Introduction ASCII & Player information gathering
 
 introduction()
-card_player = player_info_gathering()
-player_introduction(card_player)
+player = player_info_gathering()
+player_introduction(player)
 
 
 # Declaration of Deck
 
 deck = Deck()
 
+# Opponents Generation
+
+opp_one = Opponent()
+opp_two = Opponent()
+opp_three = Opponent()
+opp_four = Opponent()
+opp_five = Opponent()
+
 # Command Loop
 
-print(deck._cards[0].suit)
-deck.shuffle()
-print(deck._cards[0].suit)
-
+while True:
