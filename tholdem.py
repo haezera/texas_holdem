@@ -1,14 +1,47 @@
 import random
 
+class Node:
+    def __init__(self, player):
+        self.player = player
+        self.next = None
+    
+    def get_next(self):
+        return self.next
+    
+class LinkedList:
+    def __init__(self):
+        self.head = None
+    
+    def insert(self, player):
+        newNode = Node(player)
+        if (self.head):
+            current = self.head
+            while (current.next):
+                current = current.next
+            current.next = newNode
+        else:
+            self.head = newNode
+    
+    def printLL(self):
+        current = self.head
+        while (current):
+            print(current.player.name)
+            current = current.next
+
 class Player:
     def __init__(self, name):
         self.name = name
         self.hand = [0, 0]
+        self.money = 0
+        self.dealer = 1
 
 class Opponent:
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self.bluff = random.randint(1, 10)
         self.hand = [0, 0]
+        self.money = 0
+        self.dealer = 0
 
 
 class Deck:
@@ -75,12 +108,40 @@ deck = Deck()
 
 # Opponents Generation
 
-opp_one = Opponent()
-opp_two = Opponent()
-opp_three = Opponent()
-opp_four = Opponent()
-opp_five = Opponent()
+opp_one = Opponent("opp_one")
+opp_two = Opponent("opp_two")
+opp_three = Opponent("opp_three")
+opp_four = Opponent("opp_four")
+opp_five = Opponent("opp_five")
 
-# Command Loop
+# Allocation of Money for player and AI
+
+player.money = input("How much money would you like to start with?")
+opp_one.money = player.money
+opp_two.money = player.money
+opp_three.money = player.money
+opp_four.money = player.money
+opp_five.money = player.money
+
+# We start off with the player as the dealer. 
+# Declaring a circularly linked list to make a 'table' environment. 
+
+table = LinkedList()
+table.insert(player)
+table.insert(opp_one)
+table.insert(opp_two)
+table.insert(opp_three)
+table.insert(opp_four)
+table.insert(opp_five)
+table.printLL()
+
+# Start of the command loop
+
+deck_count = 0
 
 while True:
+    # Hand Allocation
+    while deck_count < 6:
+        deck._cards[deck_count]
+
+    
