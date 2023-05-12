@@ -33,7 +33,7 @@ class Opponent:
     def __init__(self, name):
         self.name = name
         self.bluff = random.randint(1, 10)
-        self.hand = [0, 0]
+        self.hand = []
         self.money = 0
         self.dealer = 0
 
@@ -108,6 +108,22 @@ def player_introduction(player):
     print("Opponents have a 'bluff' rating.")
     print("The higher their 'bluff' rating, the more likely it is that they bluff a bad hand.")
     print("----------------------------------------------------------------------------------")
+
+def deal_cards(current, deck_count, deck):
+    while current.player.dealer != 1:
+        current.player.hand.append(deck._cards[deck_count])
+        current = current.next
+        deck_count = deck_count + 1
+    current.player.hand.append(deck._cards[deck_count])
+
+    current = table.head
+    current = current.next
+    # Phase two of dealing.
+    while current.player.dealer != 1:
+        current.player.hand.append(deck._cards[deck_count])
+        current = current.next
+        deck_count = deck_count + 1
+    current.player.hand.append(deck._cards[deck_count])
 # Main Function
 
 # Introduction ASCII & Player information gathering
@@ -166,24 +182,11 @@ deck_count = 0
 current = table.head
 current = current.next
 
-while (player.money > 0):
+while player.money > 0:
 
     deck.shuffle()
     print("Dealing phase:")
-
-    # Phase one of dealing.
-    while (current.player.dealer != 1):
-        current.player.hand.append(deck._cards[deck_count])
-        current = current.next
-        deck_count = deck_count + 1
-    current.player.hand.append(deck._cards[deck_count])
-
-    # Phase two of dealing.
-    while (current.player.dealer != 1):
-        current.player.hand.append(deck._cards[deck_count])
-        current = current.next
-        deck_count = deck_count + 1
-    current.player.hand.append(deck._cards[deck_count])
-
+    deal_cards(current, deck_count, deck)
+    break
 
     
