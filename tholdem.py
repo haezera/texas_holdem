@@ -21,17 +21,11 @@ class LinkedList:
             current.next = newNode
         else:
             self.head = newNode
-    
-    def printLL(self):
-        current = self.head
-        while (current):
-            print(current.player.name)
-            current = current.next
 
 class Player:
     def __init__(self, name):
         self.name = name
-        self.hand = [0, 0]
+        self.hand = []
         self.money = 0
         self.dealer = 1
 
@@ -63,15 +57,36 @@ class Card:
         self.number = number
 
 def printc(card):
-    if (card.number != 10):
-        print("----")
-        print("|" + card.number + " |")
-        print("----")
-    else:
-        print("----")
-        print("|" + card.number + "|")
-        print("----")     
- 
+    if (card.suit == "spades"):
+        print(" _____ ")
+        print("|" + card.number + " .  |")
+        print("| /.\ |")
+        print("|(_._)|")
+        print("|  |  |")
+        print("|_____|")
+    if (card.suit == "diamonds"):
+        print(" _____ ")
+        print("|" + card.number + " ^  |")
+        print("| / \ |")
+        print("| \ / |")
+        print("|  .  |")
+        print("|_____|")
+    if (card.suit == "clubs"):
+        print(" _____ ")
+        print("|" + card.number + " _  |")
+        print("| ( ) |")
+        print("|(_'_)|")
+        print("|  |  |")
+        print("|_____|")
+    if (card.suit == "hearts"):
+        print(" _____ ")
+        print("|" + card.number + "_ _ |")
+        print("|( v )|")
+        print("| \ / |")
+        print("|  .  |")
+        print("|_____|")
+
+
 def introduction():
     print("                        d8b")
     print("                        Y8P")
@@ -116,7 +131,7 @@ opp_five = Opponent("opp_five")
 
 # Allocation of Money for player and AI
 
-player.money = input("How much money would you like to start with?")
+player.money = int(input("How much money would you like to start with?"))
 opp_one.money = player.money
 opp_two.money = player.money
 opp_three.money = player.money
@@ -133,15 +148,42 @@ table.insert(opp_two)
 table.insert(opp_three)
 table.insert(opp_four)
 table.insert(opp_five)
-table.printLL()
+# Adding the circular link. 
+circular = table.head
+
+while (circular.next):
+    circular = circular.next
+circular.next = table.head
+
+# Flop, turn and river
+
+flop_t_r = []
+
 
 # Start of the command loop
 
 deck_count = 0
+current = table.head
+current = current.next
 
-while True:
-    # Hand Allocation
-    while deck_count < 6:
-        deck._cards[deck_count]
+while (player.money > 0):
+
+    deck.shuffle()
+    print("Dealing phase:")
+
+    # Phase one of dealing.
+    while (current.player.dealer != 1):
+        current.player.hand.append(deck._cards[deck_count])
+        current = current.next
+        deck_count = deck_count + 1
+    current.player.hand.append(deck._cards[deck_count])
+
+    # Phase two of dealing.
+    while (current.player.dealer != 1):
+        current.player.hand.append(deck._cards[deck_count])
+        current = current.next
+        deck_count = deck_count + 1
+    current.player.hand.append(deck._cards[deck_count])
+
 
     
