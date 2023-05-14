@@ -4,14 +4,14 @@ class Node:
     def __init__(self, player):
         self.player = player
         self.next = None
-    
+
     def get_next(self):
         return self.next
-    
+
 class LinkedList:
     def __init__(self):
         self.head = None
-    
+
     def insert(self, player):
         newNode = Node(player)
         if (self.head):
@@ -47,7 +47,7 @@ class Deck:
         suits = ["hearts", "clubs", "diamonds", "spades"]
         numbers = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]
         self._cards = [Card(s, n) for s in suits for n in numbers]
-    
+
     def shuffle(self):
         random.shuffle(self._cards)
 
@@ -154,8 +154,8 @@ opp_three.money = player.money
 opp_four.money = player.money
 opp_five.money = player.money
 
-# We start off with the player as the dealer. 
-# Declaring a circularly linked list to make a 'table' environment. 
+# We start off with the player as the dealer.
+# Declaring a circularly linked list to make a 'table' environment.
 
 table = LinkedList()
 table.insert(player)
@@ -164,7 +164,7 @@ table.insert(opp_two)
 table.insert(opp_three)
 table.insert(opp_four)
 table.insert(opp_five)
-# Adding the circular link. 
+# Adding the circular link.
 circular = table.head
 
 while (circular.next):
@@ -189,4 +189,4 @@ while player.money > 0:
     deal_cards(current, deck_count, deck)
     break
 
-    
+
