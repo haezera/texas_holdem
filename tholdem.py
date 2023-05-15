@@ -1,12 +1,11 @@
 #####################################################################################
-
 import random
-import Node
-import LinkedList
-import Player
-import Opponent
-import Deck
-import Card
+from Node import Node
+from LinkedList import LinkedList
+from Player import Player
+from Opponent import Opponent
+from Deck import Deck
+from Card import Card
 
 ######################################################################################
 
