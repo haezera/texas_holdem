@@ -86,21 +86,25 @@ def printc(card):
         print("|  .  |")
         print("|_____|")
 
-
-def introduction():
-    print("                        d8b")
-    print("                        Y8P")
-    print("")
-    print(" .d8888b 8888b. .d8888b 88888888b.  .d88b.  ")
-    print("d88P"       "88b88K     888888  88bd88  88b ")
-    print("888     .d888888 Y8888b.888888  888888  888 ")
-    print("Y88b.   888  888     X88888888  888Y88..88P ")
-    print(" Y8888P Y888888  88888P'888888  888  Y88P ")
-
 def player_info_gathering():
     name = input("What is your name? ")
     player = Player(name)
     return player
+
+def flop(table, deck, deck_count):
+    # Burn one card
+    deck_count += 1
+    table[0] = deck._cards[deck_count]
+    deck_count += 1
+    table[1] = deck._cards[deck_count]
+    deck_count += 1
+    table[2] = deck._cards[deck_count]
+    deck_count += 1
+    # Printing of cards
+    printc(table[0])
+    printc(table[1])
+    printc(table[2])
+
 
 def player_introduction(player):
     print("Hello, " + player.name + ". Welcome to Texas Holdem.")
@@ -128,7 +132,6 @@ def deal_cards(current, deck_count, deck):
 
 # Introduction ASCII & Player information gathering
 
-introduction()
 player = player_info_gathering()
 player_introduction(player)
 
@@ -183,10 +186,14 @@ current = table.head
 current = current.next
 
 while player.money > 0:
-
+    # Dealing out of cards.
     deck.shuffle()
     print("Dealing phase:")
     deal_cards(current, deck_count, deck)
+
+    # Now time to create flop
+
+
     break
 
 
