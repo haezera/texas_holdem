@@ -88,6 +88,10 @@ def deal_cards(current, deck_count, deck):
         deck_count = deck_count + 1
     current.player.hand.append(deck._cards[deck_count])
 
+def betting_decision(opponent, table):
+    # Adding probabilities and bluff effect. No bluffing pre-flop, that's stupid.
+    # Perhaps a percentage of the pool v.s their cash should be taken into context. 
+
 #####################################################################################
 
 # Introduction ASCII & Player information gathering
@@ -141,6 +145,7 @@ flop_t_r = []
 # Start of the command loop
 
 deck_count = 0
+pool = 0
 current = table.head
 current = current.next
 
@@ -149,6 +154,8 @@ while player.money > 0:
     deck.shuffle()
     print("Dealing phase:")
     deal_cards(current, deck_count, deck)
+
+    # Pre-flop betting
 
     # Now time to create flop
     flop(flop_t_r, deck, deck_count)
