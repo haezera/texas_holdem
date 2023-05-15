@@ -1,60 +1,14 @@
+#####################################################################################
+
 import random
+import Node
+import LinkedList
+import Player
+import Opponent
+import Deck
+import Card
 
-class Node:
-    def __init__(self, player):
-        self.player = player
-        self.next = None
-
-    def get_next(self):
-        return self.next
-
-class LinkedList:
-    def __init__(self):
-        self.head = None
-
-    def insert(self, player):
-        newNode = Node(player)
-        if (self.head):
-            current = self.head
-            while (current.next):
-                current = current.next
-            current.next = newNode
-        else:
-            self.head = newNode
-
-class Player:
-    def __init__(self, name):
-        self.name = name
-        self.hand = []
-        self.money = 0
-        self.dealer = 1
-
-class Opponent:
-    def __init__(self, name):
-        self.name = name
-        self.bluff = random.randint(1, 10)
-        self.hand = []
-        self.money = 0
-        self.dealer = 0
-
-
-class Deck:
-    def __init__(self):
-        self._cards = []
-        self.populate()
-
-    def populate(self):
-        suits = ["hearts", "clubs", "diamonds", "spades"]
-        numbers = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]
-        self._cards = [Card(s, n) for s in suits for n in numbers]
-
-    def shuffle(self):
-        random.shuffle(self._cards)
-
-class Card:
-    def __init__(self, suit, number):
-        self.suit = suit
-        self.number = number
+######################################################################################
 
 def printc(card):
     if (card.suit == "spades"):
@@ -94,16 +48,22 @@ def player_info_gathering():
 def flop(table, deck, deck_count):
     # Burn one card
     deck_count += 1
-    table[0] = deck._cards[deck_count]
+    table.append(deck._cards[deck_count])
     deck_count += 1
-    table[1] = deck._cards[deck_count]
+    table.append(deck._cards[deck_count])
     deck_count += 1
-    table[2] = deck._cards[deck_count]
+    table.append(deck._cards[deck_count])
     deck_count += 1
     # Printing of cards
+    print("Table:")
     printc(table[0])
     printc(table[1])
     printc(table[2])
+
+def printh(player):
+    print("Your hand:")
+    printc(player.hand[0])
+    printc(player.hand[1])
 
 
 def player_introduction(player):
@@ -128,13 +88,13 @@ def deal_cards(current, deck_count, deck):
         current = current.next
         deck_count = deck_count + 1
     current.player.hand.append(deck._cards[deck_count])
-# Main Function
+
+#####################################################################################
 
 # Introduction ASCII & Player information gathering
 
 player = player_info_gathering()
 player_introduction(player)
-
 
 # Declaration of Deck
 
@@ -192,7 +152,8 @@ while player.money > 0:
     deal_cards(current, deck_count, deck)
 
     # Now time to create flop
-
+    flop(flop_t_r, deck, deck_count)
+    printh(player)
 
     break
 
