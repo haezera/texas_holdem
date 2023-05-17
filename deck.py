@@ -1,4 +1,4 @@
-import Card
+import card
 import random
 
 class Deck:
