@@ -85,9 +85,34 @@ def deal_cards(current, deck_count, deck, table):
         deck_count = deck_count + 1
     current.player.hand.append(deck._cards[deck_count])
 
-def preflop_bet(table, pot):
+def hand_strength(player, table):
+
+def hand_strength_preflop(player):
+    # Consider the hand strength at the table
+    
+
+def ai_bet_decision(opponent, big_blind):
+    # First consider the amount of big blinds they have
+    amnt_of_bbs = opponent.money / big_blind
+    if (amnt_of_bbs < 15):
+        # Playing more cautiously
+    
+    else:
+        # Playing more loosely
+
+
+def preflop_bet(table, pot, player):
     current = table.head # Dealer
-    current = current.next
+    flag = current.next.next
+    current = current.next.next.next # First person after big blind
+    while current != flag:
+        if current == player:
+            player_bet = int(input("How much would you like to bet? (0 for nothing)"))
+            while player_bet > player.money:
+                print("Too large of a bet! Your current money is " + player.money + ".")
+                player_bet = int(input("How much would you like to bet? (0 for nothing)"))
+            pot += player_bet
+            current.player.money -= player_bet
     
 
 
