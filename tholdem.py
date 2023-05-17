@@ -37,6 +37,8 @@ opp_two.money = player.money
 opp_three.money = player.money
 opp_four.money = player.money
 opp_five.money = player.money
+big_blind = player.money / 50
+small_blind = big_blind / 2
 
 # We start off with the player as the dealer.
 # Declaring a circularly linked list to make a 'table' environment.
@@ -63,11 +65,16 @@ flop_t_r = []
 # Start of the command loop
 
 deck_count = 0
-pool = 0
+pot = 0
 current = table.head
 current = current.next
 
 while player.money > 0:
+    # Small blind and big blind
+    current.player.money -= small_blind
+    pot += small_blind
+    current.next.player.money -= big_blind
+    pot += big_blind
     # Dealing out of cards.
     deck.shuffle()
     print("Dealing phase:")
