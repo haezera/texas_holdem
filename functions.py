@@ -89,12 +89,43 @@ def hand_strength(player, table):
 
 def hand_strength_preflop(player):
     # Consider the hand strength at the table
-    
+    suited = 0
+    high_pair = 0
+    high_card = 0
+    low_pair = 0
+    if player.hand[0].suit == player.hand[1].suit:
+        suited = 1
+        if player.hand[0].number == player.hand[1].number:
+            if (player.hand[0].number == 10 
+            or player.hand[0].number == 'J'
+            or player.hand[0].number == 'Q'
+            or player.hand[0].number == 'K'
+            or player.hand[0].number == 'A'):
+                high_pair = 1
+            else:
+                low_pair = 1
+    elif player.hand[0].number == player.hand[0].number:
+        if (player.hand[0].number == 10 
+        or player.hand[0].number == 'J'
+        or player.hand[0].number == 'Q'
+        or player.hand[0].number == 'K'
+        or player.hand[0].number == 'A'):
+            high_pair = 1
+        else:
+            low_pair = 1
+    elif (player.hand[0].number == 10 
+    or player.hand[0].number == 'J'
+    or player.hand[0].number == 'Q'
+    or player.hand[0].number == 'K'
+    or player.hand[0].number == 'A'):
+        high_card = 1
+
+
 
 def ai_bet_decision(opponent, big_blind):
     # First consider the amount of big blinds they have
     amnt_of_bbs = opponent.money / big_blind
-    if (amnt_of_bbs < 15):
+    if amnt_of_bbs < 15:
         # Playing more cautiously
     
     else:
