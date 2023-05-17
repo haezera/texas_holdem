@@ -96,7 +96,6 @@ def printh(player):
     printc(player.hand[0])
     printc(player.hand[1])
 
-
 def player_introduction(player):
     print("Hello, " + player.name + ". Welcome to Texas Holdem.")
     print("The goal of Texas Holdem is to create the best combination of cards possible. These combinations are ranked such that they are less probable the strong they are.")
@@ -136,9 +135,6 @@ def hand_strength(player, table):
     # Royal flush
     if len(full_hand) >= 5:
         
-
-
-
 def hand_strength_preflop(player):
     # Consider the hand strength at the table
     suited = 0
@@ -188,8 +184,6 @@ def hand_strength_preflop(player):
 def ai_bet_decision(opponent, big_blind):
     # First consider the amount of big blinds they have
     amnt_of_bbs = opponent.money / big_blind
-
-
 
 def preflop_bet(table, pot, player):
     current = table.head # Dealer
