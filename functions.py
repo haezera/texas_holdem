@@ -85,7 +85,7 @@ def deal_cards(current, deck_count, deck, table):
         deck_count = deck_count + 1
     current.player.hand.append(deck._cards[deck_count])
 
-def hand_strength(player, table):
+
 
 def hand_strength_preflop(player):
     # Consider the hand strength at the table
@@ -119,17 +119,24 @@ def hand_strength_preflop(player):
     or player.hand[0].number == 'K'
     or player.hand[0].number == 'A'):
         high_card = 1
-
+    if (high_card == 1):
+        print("High card")
+    elif (high_pair == 1 and suited == 1):
+        print("Suited high pair")
+    elif (low_pair == 1 and suited == 1):
+        print("Suited low pair")
+    elif (high_pair == 1):
+        print("High pair")
+    elif (low_pair == 1):
+        print("Low pair")
+    else:
+        print("Bad hand")
 
 
 def ai_bet_decision(opponent, big_blind):
     # First consider the amount of big blinds they have
     amnt_of_bbs = opponent.money / big_blind
-    if amnt_of_bbs < 15:
-        # Playing more cautiously
-    
-    else:
-        # Playing more loosely
+
 
 
 def preflop_bet(table, pot, player):
