@@ -41,6 +41,41 @@ def player_info_gathering():
     player = Player(name)
     return player
 
+def straight_finder(full_hand):
+    diff = 0
+    if (len(full_hand) < 5):
+        return False
+    elif (len(full_hand) == 5):
+        for i in range(1, len(full_hand)):
+            diff = full_hand[i].number - full_hand[i-1]
+            if (diff != 1):
+                return False
+    elif (len(full_hand) == 6):
+        for i in range(1, len(full_hand)):
+            diff = full_hand[i].number - full_hand[i-1]
+            if (diff != 1):
+                # 6th number is not a straight, 1 -> 5 is a straight
+                if i == len(full_hand):
+                    return True
+                else:
+                    return False
+            else:
+                return True
+    elif (len(full_hand) == 7):
+        for i in range(1, len(full_hand)):
+            diff = full_hand[i] - full_hand[i-1]
+            if (diff != 1):
+                # 6th or 7th card - still constitutes a straight 1 -> 5
+                if (i == len(full_hand)
+                or i == len(full_hand) - 1):
+                    return True
+                else:
+                    return False 
+            # All 7 numbers constitute a straight
+            else:
+                return True
+            
+
 def flop(table, deck, deck_count):
     # Burn one card
     deck_count += 1
@@ -84,6 +119,23 @@ def deal_cards(current, deck_count, deck, table):
         current = current.next
         deck_count = deck_count + 1
     current.player.hand.append(deck._cards[deck_count])
+
+def hand_strength(player, table):
+    i = 0
+
+    full_hand = []
+    full_hand.append(player[0])
+    full_hand.append(player[1])
+
+    for i in range(len(table)):
+        full_hand.append(player[i])
+
+    # Sort into 'ascending' order
+    full_hand.sort()
+
+    # Royal flush
+    if len(full_hand) >= 5:
+        
 
 
 
