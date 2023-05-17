@@ -85,6 +85,11 @@ def deal_cards(current, deck_count, deck, table):
         deck_count = deck_count + 1
     current.player.hand.append(deck._cards[deck_count])
 
+def preflop_bet(table, pot):
+    current = table.head # Dealer
+    current = current.next
+    
+
 
     # Adding probabilities and bluff effect. No bluffing pre-flop, that's stupid.
     # Perhaps a percentage of the pool v.s their cash should be taken into context. 
