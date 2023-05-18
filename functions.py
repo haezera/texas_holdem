@@ -40,40 +40,58 @@ def player_info_gathering():
     name = input("What is your name? ")
     player = Player(name)
     return player
-
+      
 def straight_finder(full_hand):
     diff = 0
     if (len(full_hand) < 5):
         return False
     elif (len(full_hand) == 5):
         for i in range(1, len(full_hand)):
-            diff = full_hand[i].number - full_hand[i-1]
+            diff = full_hand[i].number - full_hand[i-1].number
+            print(diff)
+            # Ace high straight, 1 -> 5
             if (diff != 1):
-                return False
+                if (i == len(full_hand) 
+                and full_hand[i].number == 14
+                and full_hand[0].number == 2):
+                    return True
+                else:
+                    return False
     elif (len(full_hand) == 6):
         for i in range(1, len(full_hand)):
-            diff = full_hand[i].number - full_hand[i-1]
+            diff = full_hand[i].number - full_hand[i-1].number
             if (diff != 1):
                 # 6th number is not a straight, 1 -> 5 is a straight
                 if i == len(full_hand):
                     return True
+                # There is a 5th number blocking the ace straight. The 6th number would be 14. 
+                elif (i == len(full_hand) - 1
+                and full_hand[0].number == 2
+                and full_hand[i + 1].numbver == 14):
+                    return True
                 else:
-                    return False
+                    return False 
             else:
                 return True
     elif (len(full_hand) == 7):
         for i in range(1, len(full_hand)):
-            diff = full_hand[i] - full_hand[i-1]
+            diff = full_hand[i].number - full_hand[i-1].number
             if (diff != 1):
                 # 6th or 7th card - still constitutes a straight 1 -> 5
                 if (i == len(full_hand)
                 or i == len(full_hand) - 1):
+                    return True
+                # Example [2, 3, 4, 5, 7, 9, 14] = Ace high straight 1 2 3 4 5 
+                elif (i == len(full_hand) - 2
+                and full_hand[i + 2] == 14
+                and full_hand[0] == 2):
                     return True
                 else:
                     return False 
             # All 7 numbers constitute a straight
             else:
                 return True
+    return True
             
 
 def flop(table, deck, deck_count):
@@ -133,7 +151,6 @@ def hand_strength(player, table):
     full_hand.sort()
 
     # Royal flush
-    if len(full_hand) >= 5:
         
 def hand_strength_preflop(player):
     # Consider the hand strength at the table
@@ -202,3 +219,15 @@ def preflop_bet(table, pot, player):
 
     # Adding probabilities and bluff effect. No bluffing pre-flop, that's stupid.
     # Perhaps a percentage of the pool v.s their cash should be taken into context. 
+
+card_one = Card("hearts", 3)
+card_two = Card("hearts", 4)
+card_three = Card("hearts", 5)
+card_four = Card("hearts", 6)
+card_five = Card("hearts", 7)
+card_six = card
+
+if straight_finder([card_one, card_two, card_three, card_four, card_five]) == True:
+    print("True")
+else:
+    print("False")
