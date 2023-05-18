@@ -51,7 +51,7 @@ def straight_finder(full_hand):
             print(diff)
             # Ace high straight, 1 -> 5
             if (diff != 1):
-                if (i == len(full_hand) 
+                if (i == len(full_hand) - 1 
                 and full_hand[i].number == 14
                 and full_hand[0].number == 2):
                     return True
@@ -61,38 +61,107 @@ def straight_finder(full_hand):
         for i in range(1, len(full_hand)):
             diff = full_hand[i].number - full_hand[i-1].number
             if (diff != 1):
+                print(i)
+                print(full_hand[5].number)
                 # 6th number is not a straight, 1 -> 5 is a straight
-                if i == len(full_hand):
+                if i == 1:
+                    continue
+                elif i == len(full_hand):
+                    full_hand.pop(i)
                     return True
                 # There is a 5th number blocking the ace straight. The 6th number would be 14. 
-                elif (i == len(full_hand) - 1
+                elif (i == len(full_hand) - 2
                 and full_hand[0].number == 2
-                and full_hand[i + 1].numbver == 14):
+                and full_hand[5].number == 14):
+                    print("Here")
+                    full_hand.pop(i)
                     return True
                 else:
+                    print("Here 2")
                     return False 
-            else:
-                return True
+                
     elif (len(full_hand) == 7):
         for i in range(1, len(full_hand)):
             diff = full_hand[i].number - full_hand[i-1].number
             if (diff != 1):
+                if i == 1 or i == 2:
+                    continue
                 # 6th or 7th card - still constitutes a straight 1 -> 5
-                if (i == len(full_hand)
-                or i == len(full_hand) - 1):
+                elif (i == len(full_hand) - 1
+                or i == len(full_hand) - 2):
                     return True
                 # Example [2, 3, 4, 5, 7, 9, 14] = Ace high straight 1 2 3 4 5 
-                elif (i == len(full_hand) - 2
+                elif (i == len(full_hand) - 3
                 and full_hand[i + 2] == 14
                 and full_hand[0] == 2):
+                    full_hand.pop(i)
+                    full_hand.pop(i + 1)
                     return True
                 else:
                     return False 
             # All 7 numbers constitute a straight
-            else:
-                return True
     return True
-            
+
+def straight_modifier(full_hand):
+    diff = 0
+    if (len(full_hand) < 5):
+        return full_hand
+    elif (len(full_hand) == 5):
+        for i in range(1, len(full_hand)):
+            diff = full_hand[i].number - full_hand[i-1].number
+            print(diff)
+            # Ace high straight, 1 -> 5
+            if (diff != 1):
+                if (i == len(full_hand) - 1 
+                and full_hand[i].number == 14
+                and full_hand[0].number == 2):
+                    return full_hand
+                else:
+                    return full_hand
+    elif (len(full_hand) == 6):
+        for i in range(1, len(full_hand)):
+            diff = full_hand[i].number - full_hand[i-1].number
+            if (diff != 1):
+                print(i)
+                print(full_hand[5].number)
+                # 6th number is not a straight, 1 -> 5 is a straight
+                if i == 1:
+                    continue
+                elif i == len(full_hand):
+                    full_hand.pop(i)
+                    return full_hand
+                # There is a 5th number blocking the ace straight. The 6th number would be 14. 
+                elif (i == len(full_hand) - 2
+                and full_hand[0].number == 2
+                and full_hand[5].number == 14):
+                    print("Here")
+                    full_hand.pop(i)
+                    return full_hand
+                else:
+                    print("Here 2")
+                    return full_hand
+                
+    elif (len(full_hand) == 7):
+        for i in range(1, len(full_hand)):
+            diff = full_hand[i].number - full_hand[i-1].number
+            if (diff != 1):
+                if i == 1 or i == 2:
+                    continue
+                # 6th or 7th card - still constitutes a straight 1 -> 5
+                elif (i == len(full_hand) - 1
+                or i == len(full_hand) - 2):
+                    return full_hand
+                # Example [2, 3, 4, 5, 7, 9, 14] = Ace high straight 1 2 3 4 5 
+                elif (i == len(full_hand) - 3
+                and full_hand[i + 2] == 14
+                and full_hand[0] == 2):
+                    full_hand.pop(i)
+                    full_hand.pop(i + 1)
+                    return full_hand
+                else:
+                    return full_hand
+            # All 7 numbers constitute a straight
+    return full_hand
 
 def flop(table, deck, deck_count):
     # Burn one card
@@ -202,6 +271,9 @@ def ai_bet_decision(opponent, big_blind):
     # First consider the amount of big blinds they have
     amnt_of_bbs = opponent.money / big_blind
 
+    # Define the strength of their hand + consider their monetary position
+
+
 def preflop_bet(table, pot, player):
     current = table.head # Dealer
     flag = current.next.next
@@ -220,14 +292,17 @@ def preflop_bet(table, pot, player):
     # Adding probabilities and bluff effect. No bluffing pre-flop, that's stupid.
     # Perhaps a percentage of the pool v.s their cash should be taken into context. 
 
-card_one = Card("hearts", 3)
-card_two = Card("hearts", 4)
-card_three = Card("hearts", 5)
-card_four = Card("hearts", 6)
-card_five = Card("hearts", 7)
-card_six = card
+card_one = Card("hearts", 2)
+card_two = Card("hearts", 3)
+card_three = Card("hearts", 4)
+card_four = Card("hearts", 5)
+card_five = Card("hearts", 9)
+card_six = Card("hearts", 14)
+list = [card_one, card_two, card_three, card_four, card_five, card_six]
 
-if straight_finder([card_one, card_two, card_three, card_four, card_five]) == True:
+if straight_finder([card_one, card_two, card_three, card_four, card_five, card_six]) == True:
+    list = straight_modifier(list)
     print("True")
+    print(list)
 else:
     print("False")
