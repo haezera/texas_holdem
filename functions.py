@@ -64,7 +64,7 @@ def straight_finder(full_hand):
                 print(i)
                 print(full_hand[5].number)
                 # 6th number is not a straight, 1 -> 5 is a straight
-                if i == 1:
+                if i == 0:
                     continue
                 elif i == len(full_hand):
                     full_hand.pop(i)
@@ -84,7 +84,7 @@ def straight_finder(full_hand):
         for i in range(1, len(full_hand)):
             diff = full_hand[i].number - full_hand[i-1].number
             if (diff != 1):
-                if i == 1 or i == 2:
+                if i == 0 or i == 1:
                     continue
                 # 6th or 7th card - still constitutes a straight 1 -> 5
                 elif (i == len(full_hand) - 1
@@ -125,7 +125,7 @@ def straight_modifier(full_hand):
                 print(i)
                 print(full_hand[5].number)
                 # 6th number is not a straight, 1 -> 5 is a straight
-                if i == 1:
+                if i == 0:
                     continue
                 elif i == len(full_hand):
                     full_hand.pop(i)
@@ -145,7 +145,7 @@ def straight_modifier(full_hand):
         for i in range(1, len(full_hand)):
             diff = full_hand[i].number - full_hand[i-1].number
             if (diff != 1):
-                if i == 1 or i == 2:
+                if i == 0 or i == 1:
                     continue
                 # 6th or 7th card - still constitutes a straight 1 -> 5
                 elif (i == len(full_hand) - 1
