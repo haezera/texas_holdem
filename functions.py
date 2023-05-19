@@ -306,15 +306,15 @@ def pair(full_hand):
     return False
 
 
-def hand_strength(player, table):
+def hand_strength(player, flop_t_r):
     i = 0
     strength = 0
     full_hand = []
     full_hand.append(player[0])
     full_hand.append(player[1])
 
-    for i in range(len(table)):
-        full_hand.append(player[i])
+    for i in range(1, len(flop_t_r)):
+        full_hand.append(flop_t_r[i])
 
     # Sort into 'ascending' order
     full_hand.sort(key = lambda x: x.number)
@@ -374,6 +374,7 @@ def hand_strength_preflop(player):
     high_pair = 0
     high_card = 0
     low_pair = 0
+    strength = 0
     if player.hand[0].suit == player.hand[1].suit:
         suited = 1
         if player.hand[0].number == player.hand[1].number:
@@ -401,7 +402,7 @@ def hand_strength_preflop(player):
     or player.hand[0].number == 14):
         high_card = 1
 
-    elif (high_pair == 1):
+    if (high_pair == 1):
         strength = 5
     elif (low_pair == 1):
         strength = 4
@@ -411,6 +412,7 @@ def hand_strength_preflop(player):
         strength = 2
     else:
         strength = 1
+    return strength
 
 
 def ai_bet_decision(opponent, big_blind, table):
@@ -448,14 +450,10 @@ def preflop_bet(table, pot, player, big_blind):
     current = table.head # Dealer
     flag = current.next.next # Big Blind
     current = current.next.next.next # First person after big blind
-    print("here")
     while current != flag:
-        print("loop")
         if current.player.fold == 1:
             current = current.next
-            print("hello")
-        if current.player == player:
-            print("here 3")
+        elif current.player == player:
             player_bet = int(input("How much would you like to bet? (0 for nothing, -1 for fold)"))
             if (player_bet == -1):
                 player.fold = 1
@@ -467,45 +465,76 @@ def preflop_bet(table, pot, player, big_blind):
                 current.player.money -= player_bet
                 current = current.next
         else:
-            print("hello")
             opp_h_strength = hand_strength_preflop(current.player)
             if (opp_h_strength == 2):
-                print("test 1")
                 current.player.money -= big_blind
                 pot += big_blind
-            elif (opp_h_strength == 3):
-                print("test 2")
+            elif (opp_h_strength >= 3):
                 current.player.money -= big_blind * (current.player.bluff / 10 + 1)
                 pot += big_blind * (current.player.bluff / 10 + 1)
             else:
                 current.player.fold = 1
             current = current.next
-    if current.player == player:
-        print("here 3")
-        player_bet = int(input("How much would you like to bet? (0 for nothing, -1 for fold)"))
-        if (player_bet == -1):
-            player.fold = 1
+    if current.player.fold != 1:
+        if current.player == player:
+            player_bet = int(input("How much would you like to bet? (0 for nothing, -1 for fold)"))
+            if (player_bet == -1):
+                player.fold = 1
+            else:
+                while player_bet > player.money:
+                    print("Too large of a bet! Your current money is " + player.money + ".")
+                    player_bet = int(input("How much would you like to bet? (0 for nothing)"))
+                pot += player_bet
+                current.player.money -= player_bet
+                current = current.next
         else:
-            while player_bet > player.money:
-                print("Too large of a bet! Your current money is " + player.money + ".")
-                player_bet = int(input("How much would you like to bet? (0 for nothing)"))
-            pot += player_bet
-            current.player.money -= player_bet
+            opp_h_strength = hand_strength_preflop(current.player)
+            if (opp_h_strength == 2):
+                current.player.money -= big_blind
+                pot += big_blind
+            elif (opp_h_strength >= 3):
+                current.player.money -= big_blind * (current.player.bluff / 10 + 1)
+                pot += big_blind * (current.player.bluff / 10 + 1)
+            else:
+                current.player.fold = 1
             current = current.next
-    else:
-        print("hello")
-        opp_h_strength = hand_strength_preflop(current.player)
-        if (opp_h_strength == 2):
-            print("test 1")
-            current.player.money -= big_blind
-            pot += big_blind
-        elif (opp_h_strength == 3):
-            print("test 2")
-            current.player.money -= big_blind * (current.player.bluff / 10 + 1)
-            pot += big_blind * (current.player.bluff / 10 + 1)
-        else:
-            current.player.fold = 1
-        current = current.next
     return pot
 
-            
+def postflop_bet(table, pot, player, big_blind, flop_t_r):
+    flag = table.head
+    current = flag.next
+    while (current != flag):
+        if current.player.fold == 1:
+            continue
+        elif current.player == current:
+            player_bet = int(input("How much would you like to bet? (0 for nothing, -1 for fold)"))
+            if (player_bet == -1):
+                player.fold = 1
+            else:
+                while player_bet > player.money:
+                    print("Too large of a bet! Your current money is " + player.money + ".")
+                    player_bet = int(input("How much would you like to bet? (0 for nothing)"))
+                pot += player_bet
+                current.player.money -= player_bet
+                current = current.next
+        else:
+            if ai_bet_decision(current.player, big_blind, flop_t_r) == True:
+                pot -= big_blind * (current.player.bluff / 10 + 1)
+            current = current.next
+    if current.player.fold != 1:
+        if current.player == current:
+            player_bet = int(input("How much would you like to bet? (0 for nothing, -1 for fold)"))
+            if (player_bet == -1):
+                player.fold = 1
+            else:
+                while player_bet > player.money:
+                    print("Too large of a bet! Your current money is " + player.money + ".")
+                    player_bet = int(input("How much would you like to bet? (0 for nothing)"))
+                pot += player_bet
+                current.player.money -= player_bet
+                current = current.next
+        else:
+            if ai_bet_decision(current.player, big_blind, flop_t_r) == True:
+                pot -= big_blind * (current.player.bluff / 10 + 1)
+            current = current.next
+    return pot

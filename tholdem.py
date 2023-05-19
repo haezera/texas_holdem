@@ -81,10 +81,12 @@ while player.money > 0:
     deal_cards(current, deck_count, deck, table)
 
     # Pre-flop betting
-    preflop_bet(table, pot, player, big_blind)
+    pot = preflop_bet(table, pot, player, big_blind)
     # Now time to create flop
+    print("Pot: " + str(pot))
     flop(flop_t_r, deck, deck_count)
     printh(player)
+    pot = postflop_bet(table, pot, player, big_blind, flop_t_r)
 
     break
 
