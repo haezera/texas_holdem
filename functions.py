@@ -5,6 +5,11 @@ from player import Player
 from opponent import Opponent
 from deck import Deck
 from card import Card
+from collections import Counter
+
+###################################################################################################
+
+###################################################################################################
 
 def printc(card):
     if (card.suit == "spades"):
@@ -36,12 +41,12 @@ def printc(card):
         print("|  .  |")
         print("|_____|")
 
+
 def player_info_gathering():
     name = input("What is your name? ")
     player = Player(name)
     return player
 
-# TODO: REMOVE FIRST OR SECOND CARD WHEN CARDS ARE 
 
 def straight_finder(full_hand):
     diff = 0
@@ -102,6 +107,7 @@ def straight_finder(full_hand):
                     return False 
             # All 7 numbers constitute a straight
     return True
+
 
 def straight_modifier(full_hand):
     diff = 0
@@ -175,11 +181,17 @@ def straight_modifier(full_hand):
         full_hand.pop(1)
     return full_hand
 
+
 def flush_finder(full_hand):
+    counter = 0
     for i in range(1, len(full_hand)):
-        if full_hand[i].suit != full_hand[i-1].suit:
-            return False
-    return True
+        if full_hand[i].suit == full_hand[i-1].suit:
+            counter += 1
+    if counter == 5:
+        return True
+    else:
+        return False
+
 
 def flop(table, deck, deck_count):
     # Burn one card
@@ -196,10 +208,12 @@ def flop(table, deck, deck_count):
     printc(table[1])
     printc(table[2])
 
+
 def printh(player):
     print("Your hand:")
     printc(player.hand[0])
     printc(player.hand[1])
+
 
 def player_introduction(player):
     print("Hello, " + player.name + ". Welcome to Texas Holdem.")
@@ -207,6 +221,7 @@ def player_introduction(player):
     print("Opponents have a 'bluff' rating.")
     print("The higher their 'bluff' rating, the more likely it is that they bluff a bad hand.")
     print("----------------------------------------------------------------------------------")
+
 
 def deal_cards(current, deck_count, deck, table):
     while current.player.dealer != 1:
@@ -223,12 +238,73 @@ def deal_cards(current, deck_count, deck, table):
         current = current.next
         deck_count = deck_count + 1
     current.player.hand.append(deck._cards[deck_count])
+    
+
+def full_house(full_hand):
+    value_list = []
+    three_count = 0
+    two_count = 0
+    for i in range(0, len(full_hand)):
+        value_list.append(full_hand[i].number)
+    c = Counter(value_list)
+    for j in c.values():
+        if (j == 3):
+            three_count += 1
+        if (j == 2):
+            two_count += 1
+    
+    if (three_count >= 1 and two_count >= 1):
+        return True
+
+    return False
+
 
 def four_of_a_kind(full_hand):
     value_list = []
     for i in range(0, len(full_hand)):
         value_list.append(full_hand[i].number)
-    
+    c = Counter(value_list)
+    for j in c.values():
+        if (j == 4):
+            return True
+    return False
+
+
+def three_of_a_kind(full_hand):
+    value_list = []
+    for i in range(0, len(full_hand)):
+        value_list.append(full_hand[i].number)
+    c = Counter(value_list)
+    for j in c.values():
+        if (j == 3):
+            return True
+    return False
+
+
+def two_pair(full_hand):
+    value_list = []
+    pair_counter = 0
+    for i in range(0, len(full_hand)):
+        value_list.append(full_hand[i].number)
+    c = Counter(value_list)
+    for j in c.values():
+        if (j == 2):
+            pair_counter += 1
+    if (pair_counter >= 2):
+        return True
+    return False
+
+
+def pair(full_hand):
+    value_list = []
+    for i in range(0, len(full_hand)):
+        value_list.append(full_hand[i].number)
+    c = Counter(value_list)
+    for j in c.values():
+        if (j == 2):
+            return True
+    return False
+
 
 def hand_strength(player, table):
     i = 0
@@ -241,7 +317,7 @@ def hand_strength(player, table):
         full_hand.append(player[i])
 
     # Sort into 'ascending' order
-    full_hand.sort()
+    full_hand.sort(key = lambda x: x.number)
 
     # Royal flush
     if straight_finder(full_hand) == True:
@@ -252,12 +328,45 @@ def hand_strength(player, table):
                 strength = 10
 
     # Straight flush
-    if straight_finder(full_hand) == True:
+    elif straight_finder(full_hand) == True:
         full_hand = straight_modifier(full_hand)
         if (flush_finder(full_hand) == True):
             strength = 9
 
     # Four of a kind
+    elif four_of_a_kind(full_hand) == True:
+        strength = 8
+
+    # Full House
+    elif full_house(full_hand) == True:
+        strength = 7
+    
+    # Flush
+    elif flush_finder(full_hand) == True:
+        strength = 6
+    
+    # Straight
+    elif straight_finder(full_hand) == True:
+        full_hand = straight_modifier(full_hand)
+        strength = 5
+    
+    # Three of a kind
+    elif three_of_a_kind(full_hand) == True:
+        strength = 4
+
+    # Two pair
+    elif two_pair(full_hand) == True:
+        strength = 3
+
+    # Pair
+    elif pair(full_hand) == True:
+        strength = 2
+    
+    # High Card
+    else:
+        strength = 1
+
+    return strength
                   
 def hand_strength_preflop(player):
     # Consider the hand strength at the table
@@ -269,73 +378,99 @@ def hand_strength_preflop(player):
         suited = 1
         if player.hand[0].number == player.hand[1].number:
             if (player.hand[0].number == 10 
-            or player.hand[0].number == 'J'
-            or player.hand[0].number == 'Q'
-            or player.hand[0].number == 'K'
-            or player.hand[0].number == 'A'):
+            or player.hand[0].number == 11
+            or player.hand[0].number == 12
+            or player.hand[0].number == 13
+            or player.hand[0].number == 14):
                 high_pair = 1
             else:
                 low_pair = 1
     elif player.hand[0].number == player.hand[0].number:
         if (player.hand[0].number == 10 
-        or player.hand[0].number == 'J'
-        or player.hand[0].number == 'Q'
-        or player.hand[0].number == 'K'
-        or player.hand[0].number == 'A'):
+        or player.hand[0].number == 11
+        or player.hand[0].number == 12
+        or player.hand[0].number == 13
+        or player.hand[0].number == 14):
             high_pair = 1
         else:
             low_pair = 1
     elif (player.hand[0].number == 10 
-    or player.hand[0].number == 'J'
-    or player.hand[0].number == 'Q'
-    or player.hand[0].number == 'K'
-    or player.hand[0].number == 'A'):
+    or player.hand[0].number == 11
+    or player.hand[0].number == 12
+    or player.hand[0].number == 13
+    or player.hand[0].number == 14):
         high_card = 1
-    if (high_card == 1):
-        print("High card")
-    elif (high_pair == 1 and suited == 1):
-        print("Suited high pair")
-    elif (low_pair == 1 and suited == 1):
-        print("Suited low pair")
+
     elif (high_pair == 1):
-        print("High pair")
+        strength = 5
     elif (low_pair == 1):
-        print("Low pair")
+        strength = 4
+    elif (suited == 1):
+        strength = 3
+    elif (high_card == 1):
+        strength = 2
     else:
-        print("Bad hand")
+        strength = 1
 
 
-def ai_bet_decision(opponent, big_blind):
+def ai_bet_decision(opponent, big_blind, table):
     # First consider the amount of big blinds they have
     amnt_of_bbs = opponent.money / big_blind
-
+    opp_h_strength = 0
+    bluff_decision = 0
     # Define the strength of their hand + consider their monetary position
+    # A three of a kind and above is pretty strong. But this should be accounted for. 
+    opp_h_strength = hand_strength(opponent.hand, table)
+
+    # First need to decide if they are a big bluffer or not. 
+    bluff_decider = random.randint(1, 10)
+    if bluff_decider <= opponent.bluff:
+        bluff_decision == 1
+        return True
+    else:
+        # Consider monetary strength
+        # Tight
+        if (amnt_of_bbs < 15):
+            if (opp_h_strength >= 4):
+                return True
+            else:
+                return False
+        # Loose
+        else:
+            if (opp_h_strength >= 2):
+                return True
+            else:
+                return False
 
 
-def preflop_bet(table, pot, player):
+
+def preflop_bet(table, pot, player, big_blind):
     current = table.head # Dealer
     flag = current.next.next
     current = current.next.next.next # First person after big blind
     while current != flag:
+        if current.player.fold == 1:
+            current = current.next
         if current == player:
-            player_bet = int(input("How much would you like to bet? (0 for nothing)"))
-            while player_bet > player.money:
-                print("Too large of a bet! Your current money is " + player.money + ".")
-                player_bet = int(input("How much would you like to bet? (0 for nothing)"))
-            pot += player_bet
-            current.player.money -= player_bet
-    
+            player_bet = int(input("How much would you like to bet? (0 for nothing, -1 for fold)"))
+            if (player_bet == -1):
+                player.fold = 1
+            else:
+                while player_bet > player.money:
+                    print("Too large of a bet! Your current money is " + player.money + ".")
+                    player_bet = int(input("How much would you like to bet? (0 for nothing)"))
+                pot += player_bet
+                current.player.money -= player_bet
+                current = current.next
+        else:
+            opp_h_strength = hand_strength_preflop(current.player)
+            if (opp_h_strength == 2):
+                current.player.money -= big_blind
+                pot += big_blind
+            elif (opp_h_strength == 3):
+                current.player.money -= big_blind * (current.player.bluff / 10 + 1)
+                pot += big_blind * (current.player.bluff / 10 + 1)
+            else:
+                current.player.fold = 1
 
-
-    # Adding probabilities and bluff effect. No bluffing pre-flop, that's stupid.
-    # Perhaps a percentage of the pool v.s their cash should be taken into context. 
-card_zero = Card("hearts", 5)
-card_one = Card("hearts", 2)
-card_two = Card("clubs", 2)
-card_three = Card("hearts", 2)
-card_four = Card("hearts", 2)
-card_five = Card("hearts", 13)
-card_six = Card("hearts", 14)
-
-list = [card_zero, card_one, card_two, card_three, card_four, card_five, card_six]
-four_of_a_kind(list)
+            

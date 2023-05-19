@@ -7,3 +7,4 @@ class Opponent:
         self.hand = []
         self.money = 0
         self.dealer = 0
+        self.fold = 0
