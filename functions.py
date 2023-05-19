@@ -40,7 +40,9 @@ def player_info_gathering():
     name = input("What is your name? ")
     player = Player(name)
     return player
-      
+
+# TODO: REMOVE FIRST OR SECOND CARD WHEN CARDS ARE 
+
 def straight_finder(full_hand):
     diff = 0
     if (len(full_hand) < 5):
@@ -61,10 +63,9 @@ def straight_finder(full_hand):
         for i in range(1, len(full_hand)):
             diff = full_hand[i].number - full_hand[i-1].number
             if (diff != 1):
-                print(i)
-                print(full_hand[5].number)
                 # 6th number is not a straight, 1 -> 5 is a straight
-                if i == 0:
+                if i == 1:
+                    first_mark = 1
                     continue
                 elif i == len(full_hand):
                     full_hand.pop(i)
@@ -73,18 +74,18 @@ def straight_finder(full_hand):
                 elif (i == len(full_hand) - 2
                 and full_hand[0].number == 2
                 and full_hand[5].number == 14):
-                    print("Here")
                     full_hand.pop(i)
                     return True
                 else:
-                    print("Here 2")
                     return False 
                 
     elif (len(full_hand) == 7):
         for i in range(1, len(full_hand)):
             diff = full_hand[i].number - full_hand[i-1].number
             if (diff != 1):
-                if i == 0 or i == 1:
+                if i == 1:
+                    continue
+                if i == 2:
                     continue
                 # 6th or 7th card - still constitutes a straight 1 -> 5
                 elif (i == len(full_hand) - 1
@@ -104,6 +105,8 @@ def straight_finder(full_hand):
 
 def straight_modifier(full_hand):
     diff = 0
+    first_mark = 0
+    second_mark = 0
     if (len(full_hand) < 5):
         return full_hand
     elif (len(full_hand) == 5):
@@ -125,7 +128,8 @@ def straight_modifier(full_hand):
                 print(i)
                 print(full_hand[5].number)
                 # 6th number is not a straight, 1 -> 5 is a straight
-                if i == 0:
+                if i == 1:
+                    first_mark = 1
                     continue
                 elif i == len(full_hand):
                     full_hand.pop(i)
@@ -145,7 +149,11 @@ def straight_modifier(full_hand):
         for i in range(1, len(full_hand)):
             diff = full_hand[i].number - full_hand[i-1].number
             if (diff != 1):
-                if i == 0 or i == 1:
+                if i == 1:
+                    first_mark = 1
+                    continue
+                if i == 2:
+                    second_mark = 1
                     continue
                 # 6th or 7th card - still constitutes a straight 1 -> 5
                 elif (i == len(full_hand) - 1
@@ -161,6 +169,10 @@ def straight_modifier(full_hand):
                 else:
                     return full_hand
             # All 7 numbers constitute a straight
+    if (first_mark == 1):
+        full_hand.pop(0)
+    if (second_mark == 1):
+        full_hand.pop(1)
     return full_hand
 
 def flop(table, deck, deck_count):
@@ -291,16 +303,17 @@ def preflop_bet(table, pot, player):
 
     # Adding probabilities and bluff effect. No bluffing pre-flop, that's stupid.
     # Perhaps a percentage of the pool v.s their cash should be taken into context. 
-
+card_zero = Card("hearts", 5)
 card_one = Card("hearts", 2)
-card_two = Card("hearts", 3)
-card_three = Card("hearts", 4)
-card_four = Card("hearts", 5)
-card_five = Card("hearts", 9)
+card_two = Card("hearts", 10)
+card_three = Card("hearts", 11)
+card_four = Card("hearts", 12)
+card_five = Card("hearts", 13)
 card_six = Card("hearts", 14)
-list = [card_one, card_two, card_three, card_four, card_five, card_six]
 
-if straight_finder([card_one, card_two, card_three, card_four, card_five, card_six]) == True:
+list = [card_zero, card_one, card_two, card_three, card_four, card_five, card_six]
+print(list)
+if straight_finder([card_zero, card_one, card_two, card_three, card_four, card_five, card_six]) == True:
     list = straight_modifier(list)
     print("True")
     print(list)
