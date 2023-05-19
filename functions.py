@@ -55,7 +55,6 @@ def straight_finder(full_hand):
     elif (len(full_hand) == 5):
         for i in range(1, len(full_hand)):
             diff = full_hand[i].number - full_hand[i-1].number
-            print(diff)
             # Ace high straight, 1 -> 5
             if (diff != 1):
                 if (i == len(full_hand) - 1 
@@ -118,7 +117,6 @@ def straight_modifier(full_hand):
     elif (len(full_hand) == 5):
         for i in range(1, len(full_hand)):
             diff = full_hand[i].number - full_hand[i-1].number
-            print(diff)
             # Ace high straight, 1 -> 5
             if (diff != 1):
                 if (i == len(full_hand) - 1 
@@ -131,7 +129,6 @@ def straight_modifier(full_hand):
         for i in range(1, len(full_hand)):
             diff = full_hand[i].number - full_hand[i-1].number
             if (diff != 1):
-                print(i)
                 print(full_hand[5].number)
                 # 6th number is not a straight, 1 -> 5 is a straight
                 if i == 1:
@@ -144,11 +141,9 @@ def straight_modifier(full_hand):
                 elif (i == len(full_hand) - 2
                 and full_hand[0].number == 2
                 and full_hand[5].number == 14):
-                    print("Here")
                     full_hand.pop(i)
                     return full_hand
                 else:
-                    print("Here 2")
                     return full_hand
                 
     elif (len(full_hand) == 7):
@@ -207,7 +202,18 @@ def flop(table, deck, deck_count):
     printc(table[0])
     printc(table[1])
     printc(table[2])
+    return table
 
+def turn(table, deck, deck_count):
+    # Burn one card
+    deck_count += 1
+    table.append(deck._cards[deck_count])
+    print("Table:")
+    printc(table[0])
+    printc(table[1])
+    printc(table[2])
+    printc(table[3])
+    return table
 
 def printh(player):
     print("Your hand:")
@@ -454,13 +460,13 @@ def preflop_bet(table, pot, player, big_blind):
         if current.player.fold == 1:
             current = current.next
         elif current.player == player:
-            player_bet = int(input("How much would you like to bet? (0 for nothing, -1 for fold)"))
+            player_bet = int(input("How much would you like to bet? (0 for nothing, -1 for fold) "))
             if (player_bet == -1):
                 player.fold = 1
             else:
                 while player_bet > player.money:
                     print("Too large of a bet! Your current money is " + player.money + ".")
-                    player_bet = int(input("How much would you like to bet? (0 for nothing)"))
+                    player_bet = int(input("How much would you like to bet? (0 for nothing) "))
                 pot += player_bet
                 current.player.money -= player_bet
                 current = current.next
@@ -477,13 +483,13 @@ def preflop_bet(table, pot, player, big_blind):
             current = current.next
     if current.player.fold != 1:
         if current.player == player:
-            player_bet = int(input("How much would you like to bet? (0 for nothing, -1 for fold)"))
+            player_bet = int(input("How much would you like to bet? (0 for nothing, -1 for fold) "))
             if (player_bet == -1):
                 player.fold = 1
             else:
                 while player_bet > player.money:
                     print("Too large of a bet! Your current money is " + player.money + ".")
-                    player_bet = int(input("How much would you like to bet? (0 for nothing)"))
+                    player_bet = int(input("How much would you like to bet? (0 for nothing) "))
                 pot += player_bet
                 current.player.money -= player_bet
                 current = current.next
@@ -505,15 +511,15 @@ def postflop_bet(table, pot, player, big_blind, flop_t_r):
     current = flag.next
     while (current != flag):
         if current.player.fold == 1:
-            continue
-        elif current.player == current:
-            player_bet = int(input("How much would you like to bet? (0 for nothing, -1 for fold)"))
+            pass
+        elif current.player == player:
+            player_bet = int(input("How much would you like to bet? (0 for nothing, -1 for fold) "))
             if (player_bet == -1):
                 player.fold = 1
             else:
                 while player_bet > player.money:
                     print("Too large of a bet! Your current money is " + player.money + ".")
-                    player_bet = int(input("How much would you like to bet? (0 for nothing)"))
+                    player_bet = int(input("How much would you like to bet? (0 for nothing) "))
                 pot += player_bet
                 current.player.money -= player_bet
                 current = current.next
@@ -522,14 +528,14 @@ def postflop_bet(table, pot, player, big_blind, flop_t_r):
                 pot -= big_blind * (current.player.bluff / 10 + 1)
             current = current.next
     if current.player.fold != 1:
-        if current.player == current:
-            player_bet = int(input("How much would you like to bet? (0 for nothing, -1 for fold)"))
+        if current.player == player:
+            player_bet = int(input("How much would you like to bet? (0 for nothing, -1 for fold) "))
             if (player_bet == -1):
                 player.fold = 1
             else:
                 while player_bet > player.money:
                     print("Too large of a bet! Your current money is " + player.money + ".")
-                    player_bet = int(input("How much would you like to bet? (0 for nothing)"))
+                    player_bet = int(input("How much would you like to bet? (0 for nothing) "))
                 pot += player_bet
                 current.player.money -= player_bet
                 current = current.next

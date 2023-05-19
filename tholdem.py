@@ -84,9 +84,14 @@ while player.money > 0:
     pot = preflop_bet(table, pot, player, big_blind)
     # Now time to create flop
     print("Pot: " + str(pot))
-    flop(flop_t_r, deck, deck_count)
+    flop_t_r = flop(flop_t_r, deck, deck_count)
     printh(player)
     pot = postflop_bet(table, pot, player, big_blind, flop_t_r)
+    print("Pot: " + str(pot))
+    flop_t_r = turn(flop_t_r, deck, deck_count)
+    printh(player)
+    pot = postflop_bet(table, pot, player, big_blind, flop_t_r)
+    
 
     break
 
