@@ -9,28 +9,28 @@ from card import Card
 def printc(card):
     if (card.suit == "spades"):
         print(" _____ ")
-        print("|" + card.number + " .  |")
+        print("|" + str(card.number) + " .  |")
         print("| /.\ |")
         print("|(_._)|")
         print("|  |  |")
         print("|_____|")
     if (card.suit == "diamonds"):
         print(" _____ ")
-        print("|" + card.number + " ^  |")
+        print("|" + str(card.number) + " ^  |")
         print("| / \ |")
         print("| \ / |")
         print("|  .  |")
         print("|_____|")
     if (card.suit == "clubs"):
         print(" _____ ")
-        print("|" + card.number + " _  |")
+        print("|" + str(card.number) + " _  |")
         print("| ( ) |")
         print("|(_'_)|")
         print("|  |  |")
         print("|_____|")
     if (card.suit == "hearts"):
         print(" _____ ")
-        print("|" + card.number + "_ _ |")
+        print("|" + str(card.number) + "_ _ |")
         print("|( v )|")
         print("| \ / |")
         print("|  .  |")
@@ -175,6 +175,12 @@ def straight_modifier(full_hand):
         full_hand.pop(1)
     return full_hand
 
+def flush_finder(full_hand):
+    for i in range(1, len(full_hand)):
+        if full_hand[i].suit != full_hand[i-1].suit:
+            return False
+    return True
+
 def flop(table, deck, deck_count):
     # Burn one card
     deck_count += 1
@@ -218,9 +224,15 @@ def deal_cards(current, deck_count, deck, table):
         deck_count = deck_count + 1
     current.player.hand.append(deck._cards[deck_count])
 
+def four_of_a_kind(full_hand):
+    value_list = []
+    for i in range(0, len(full_hand)):
+        value_list.append(full_hand[i].number)
+    
+
 def hand_strength(player, table):
     i = 0
-
+    strength = 0
     full_hand = []
     full_hand.append(player[0])
     full_hand.append(player[1])
@@ -232,7 +244,21 @@ def hand_strength(player, table):
     full_hand.sort()
 
     # Royal flush
-        
+    if straight_finder(full_hand) == True:
+        full_hand = straight_modifier(full_hand)
+        if (flush_finder(full_hand) == True):
+            if (full_hand[0].number == 10
+            and full_hand[4].number == 14):
+                strength = 10
+
+    # Straight flush
+    if straight_finder(full_hand) == True:
+        full_hand = straight_modifier(full_hand)
+        if (flush_finder(full_hand) == True):
+            strength = 9
+
+    # Four of a kind
+                  
 def hand_strength_preflop(player):
     # Consider the hand strength at the table
     suited = 0
@@ -305,17 +331,11 @@ def preflop_bet(table, pot, player):
     # Perhaps a percentage of the pool v.s their cash should be taken into context. 
 card_zero = Card("hearts", 5)
 card_one = Card("hearts", 2)
-card_two = Card("hearts", 10)
-card_three = Card("hearts", 11)
-card_four = Card("hearts", 12)
+card_two = Card("clubs", 2)
+card_three = Card("hearts", 2)
+card_four = Card("hearts", 2)
 card_five = Card("hearts", 13)
 card_six = Card("hearts", 14)
 
 list = [card_zero, card_one, card_two, card_three, card_four, card_five, card_six]
-print(list)
-if straight_finder([card_zero, card_one, card_two, card_three, card_four, card_five, card_six]) == True:
-    list = straight_modifier(list)
-    print("True")
-    print(list)
-else:
-    print("False")
+four_of_a_kind(list)
