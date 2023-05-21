@@ -23,11 +23,11 @@ deck = Deck()
 
 # Opponents Generation
 
-opp_one = Opponent("opp_one")
-opp_two = Opponent("opp_two")
-opp_three = Opponent("opp_three")
-opp_four = Opponent("opp_four")
-opp_five = Opponent("opp_five")
+opp_one = Opponent("Amy")
+opp_two = Opponent("Jack")
+opp_three = Opponent("Dilara")
+opp_four = Opponent("Lucas")
+opp_five = Opponent("Jeff")
 
 # Allocation of Money for player and AI
 
@@ -81,17 +81,20 @@ while player.money > 0:
     deal_cards(current, deck_count, deck, table)
 
     # Pre-flop betting
+    printh(player)
     pot = preflop_bet(table, pot, player, big_blind)
     # Now time to create flop
     print("Pot: " + str(pot))
     flop_t_r = flop(flop_t_r, deck, deck_count)
     printh(player)
-    pot = postflop_bet(table, pot, player, big_blind, flop_t_r)
+    pot = postflop_bet(table, pot, player, big_blind, flop_t_r) + pot
     print("Pot: " + str(pot))
     flop_t_r = turn(flop_t_r, deck, deck_count)
     printh(player)
-    pot = postflop_bet(table, pot, player, big_blind, flop_t_r)
-    
+    pot = postflop_bet(table, pot, player, big_blind, flop_t_r) + pot
+    flop_t_r = river(flop_t_r, deck, deck_count)
+    printh(player)
+    pot = postflop_bet(table, pot, player, big_blind, flop_t_r) + pot
 
     break
 
